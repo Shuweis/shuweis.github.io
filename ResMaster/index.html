@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+    <!-- Replace the content tag with appropriate information -->
+    <!-- <meta name="description" content="DESCRIPTION META TAG"> -->
+    <meta property="og:title"
+        content="ResMaster: Mastering High-Resolution Image
+        Generation via Structural and Fine-Grained Guidance" />
+    <!-- <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" /> -->
+    <meta property="og:url" content="https://github.com/Shuweis/ResMaster.github.io" />
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+    <meta property="og:image" content="static/images/banner.jpg" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="512" />
+
+    <!-- <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+    <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG"> -->
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+    <!-- <meta name="twitter:image" content="static/images/your_twitter_banner_image.png"> -->
+    <!-- <meta name="twitter:card" content="summary_large_image"> -->
+    <!-- Keywords for your paper to be indexed by-->
+    <!-- <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>ResMaster;</title>
+    <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.1.1/gradio.js"></script>
+</head>
+
+<body>
+
+    <section class="hero banner">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">
+                            ResMaster: Mastering High-Resolution Image
+Generation via Structural and Fine-Grained Guidance</h1>
+
+                        <div class="is-size-5 publication-authors">
+                            <!-- Paper authors -->
+                            <span class="author-block">
+                                <a href="https://scholar.google.com/citations?user=2ZAstoQAAAAJ&hl=zh-CN" target="_blank">Shuwei
+                                Shi</a><sup>1</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://fenglinglwb.github.io/" target="_blank">Wenbo
+                                    Li</a><sup>2</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://julianjuaner.github.io/" target="_blank">Yuechen Zhang</a><sup>2</sup>,
+                            </span>
+                            <span class="author-block">
+                                <a href="https://scholar.google.com/citations?user=GUxrycUAAAAJ&hl=zh-CN" target="_blank">Jingwen He</a><sup>2</sup>,
+                            </span>
+                            <span class="author-block">
+                                <a href="https://scholar.google.com/citations?user=BwdpTiQAAAAJ&hl=zh-CN&oi=ao" target="_blank">Biao Gong
+                                    </a><sup>3</sup>,
+                            </span>
+                            <span class="author-block">
+                                <a href="https://scholar.google.com/citations?user=JD-5DKcAAAAJ&hl=zh-CN&oi=ao" target="_blank">Yinqiang Zheng‡</a><sup>1</sup>
+                            </span>
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block"><sup>1</sup>The University of Tokyo,</span>
+                            <span class="author-block"><sup>2</sup>The Chinese University of Hong Kong,</span>
+                            <span class="author-block"><sup>3</sup>Ant Group,</span>
+                        
+                            <span class="eql-cntrb"><small><br><sup>‡</sup><a
+                                        href="mailto:yqzheng@ai.u-tokyo.ac.jp">Corresponding author.</a></small></span>
+                        </div>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="index.html" target="_blank"
+                                        class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code (Coming Soon)</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="index.html" target="_blank"
+                                        class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                    
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image carousel -->
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container">
+                <div id="results-carousel" class="carousel results-carousel">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/1.jpg" alt="carousel1" />
+                        </div>
+                        <div class="card-content has-text-centered">A car made out of vegetables.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/2.jpg" alt="carousel2" />
+                        </div>
+                        <div class="card-content has-text-centered">4 k 8 k photorealistic torso headshot portrait of elegant asuka langley in red - white tight fit
+                            contact suit reflective by james jean, zac retz, pixiv.</div>
+                    </div>
+        
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/4.jpg" alt="carousel4" />
+                        </div>
+                        <div class="card-content has-text-centered">a mystical tribal goddess adorned with feathers and gemstones and cables and synthesizer
+                            parts is surrounded by sacred geometry made from elven architecture, full body, gorgeous,
+                            perfect face, powerful, cinematic, beautifully lit, by artgerm, by karol bak, 3 d, trending on
+                            artstation, octane render, 8 k</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/5.jpg" alt="carousel5" />
+                        </div>
+                        <div class="card-content has-text-centered">A cute teddy bear in front of a plain white wall, warm and brown fur, soft and fluffy.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/6.jpg" alt="carousel6" />
+                        </div>
+                        <div class="card-content has-text-centered">mkitdecy, sad rusty decayed broken flower, deep shadows, high quality, high resolution,
+                            cinematic, dark.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/7.jpg" alt="carousel7" />
+                        </div>
+                        <div class="card-content has-text-centered">titanfall mech standing with its human pilot, dramatic lighting, illustration by greg rutkowski,
+                            yoji shinkawa, 4 k, digital art, concept art, trending on artstation.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/8.jpg" alt="carousel8" />
+                        </div>
+                        <div class="card-content has-text-centered">cute rabbit in a spacesuit</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/9.jpg" alt="carousel9" />
+                        </div>
+                        <div class="card-content has-text-centered">an adorable and fluffy baby dinosaur with big color eyes, with soft feathers and wings, in
+                            the desert with cactus, with blur background, high quality, 8k</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/10.webp" alt="carousel10" />
+                        </div>
+                        <div class="card-content has-text-centered">a melting apple.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="static/images/resmaster_samples/11.webp" alt="carousel11" />
+                        </div>
+                        <div class="card-content has-text-centered">A transparent sculpture of a duck made out of glass. The sculpture is in front of a painting
+                            of a landscape.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End image carousel -->
+
+    <!-- Paper abstract -->
+    <section class="section hero is-light">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Diffusion models excel at producing high-quality images; however, scaling to higher resolutions, such as 4K, often results in over-smoothed content, structural distortions, and repetitive patterns. 
+                            To this end, we introduce ResMaster, a novel, training-free method that empowers resolution-limited diffusion models to generate high-quality images beyond resolution restrictions. 
+                            Specifically, ResMaster leverages a low-resolution reference image created by a pre-trained diffusion model to provide structural and fine-grained guidance for crafting high-resolution images on a patch-by-patch basis. 
+                            To ensure a coherent global structure, ResMaster meticulously aligns the low-frequency components of high-resolution patches with the low-resolution reference at each denoising step. 
+                            For fine-grained guidance, tailored image prompts based on the low-resolution reference and enriched textual prompts produced by a vision-language model are incorporated. 
+                            This approach could significantly mitigate local pattern distortions and improve detail refinement. Extensive experiments validate that ResMaster sets a new benchmark for high-resolution image generation and demonstrates promising efficiency.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <h2 class="title is-3">More Samples</h2>
+                          
+                <div class="columns is-centered has-text-centered">
+                    <div class="column">
+                        <div id="modal-sample5" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/1.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample5">
+                                <img loading="lazy" src="static/images/more_samples/1.jpg" alt="sample5" />
+                            </div>
+                            <div class="card-content">a girl astronaut exploring the cosmos, floating among planets and stars, high quality detail,
+                                , anime screencap, studio ghibli style, illustration, high contrast, masterpiece, best quality.</div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div id="modal-sample6" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/2.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample6">
+                                <img loading="lazy" src="static/images/more_samples/2.jpg" alt="sample6">
+                            </div>
+                            <div class="card-content">The mesmerizing northern lights dancing in the night sky over a frozen lake. The ice reflects
+                                the vibrant colors of the aurora borealis, adding to the surreal beauty of the scene.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns is-centered has-text-centered">
+                    <div class="column">
+                        <div id="modal-sample7" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/2.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample7">
+                                <img loading="lazy" src="static/images/more_samples/3.jpg" alt="sample7" />
+                            </div>
+                            <div class="card-content">a lion, colorful, low-poly, cyan and orange eyes, poly-hd, 3d, low-poly game art, polygon
+                                mesh, jagged, blocky, wireframe edges, centered composition.</div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div id="modal-sample8" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/4.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample8">
+                                <img loading="lazy" src="static/images/more_samples/4.jpg" alt="sample8">
+                            </div>
+                            <div class="card-content">Nike sneaker concept art, (((made out of cotton candy clouds))) , luxury, futurist, stunning
+                                unreal engine render, product photography, 8k, hyper-realistic. Surrealism.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns is-centered has-text-centered">
+                    <div class="column">
+                        <div id="modal-sample9" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/5.png" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample9">
+                                <img loading="lazy" src="static/images/more_samples/5.png" alt="sample9" />
+                            </div>
+                            <div class="card-content">Happy dreamy owl monster sitting on a tree branch, colorful glittering particles, forest
+                                background, detailed feathers.</div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div id="modal-sample10" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/6.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample10">
+                                <img loading="lazy" src="static/images/more_samples/6.jpg" alt="sample10">
+                            </div>
+                            <div class="card-content">
+                                beautiful silhouette shot of a ballerina dancer.</div>
+                        </div>
+                    </div>
+<!--                </div>-->
+<!--                <div class="columns is-centered has-text-centered">-->
+                    <div class="column">
+                        <div id="modal-sample11" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/7.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample11">
+                                <img loading="lazy" src="static/images/more_samples/7.jpg" alt="sample11" />
+                            </div>
+                            <div class="card-content">
+                                An sterotypical alien with glowing eyes  in the style of translucent liquid metal filled with swirling galaxies, ray tracing, raw character, 32k uhd, schlieren photography, conceptual portraiture, wet - on - wet blending
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div id="modal-sample12" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <img loading="lazy" src="static/images/more_samples/8.jpg" />
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+                        </div>
+                        <div class="card">
+                            <div class="card-image js-modal-trigger" data-target="modal-sample12">
+                                <img loading="lazy" src="static/images/more_samples/8.jpg" alt="sample12">
+                            </div>
+                            <div class="card-content">
+                                A cozy winter scene, a snow-covered cabin with smoke rising from the chimney against a
+backdrop of pine trees, best quality, 4K.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </section>
+
+<!--    BibTex citation-->
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre><code>@misc{shi2024resmaster,
+      title={ResMaster: Mastering High-Resolution Image Generation via Structural and Fine-Grained Guidance},
+      author={Shuwei Shi, Wenbo Li, Yuechen Zhang, Jingwen He, Biao Gong, Yinqiang Zheng},
+      year={2024},
+      eprint={},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}</code></pre>
+        </div>
+    </section>
+<!--    End BibTex citation-->
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p>
+                            This page was built using the <a
+                                href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                            You are free to borrow the of this website, we just ask that you link back to this page in
+                            the footer. <br> This website is licensed under a <a rel="license"
+                                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                                Commons Attribution-ShareAlike 4.0 International License</a>.
+                        </p>
+                        <p class="has-text-centered">Total clicks: <span id="busuanzi_value_site_pv"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Statcounter tracking code -->
+
+    <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+</body>
+
+</html>
