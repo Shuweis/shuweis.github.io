@@ -10,6 +10,7 @@ If you find MotionStone useful for your work please cite:
       booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
       pages={22864--22874},
       year={2025}
+}
 ```
 
 # Website License
