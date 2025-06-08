@@ -1,8 +1,8 @@
 # LivePhoto
 
-This is the repository that contains source code for the webpage of LivePhoto.
+This is the repository that contains source code for the webpage of MotionStone.
 
-If you find LivePhoto useful for your work please cite:
+If you find MotionStone useful for your work please cite:
 ```
 @article{chen2023livephoto,
       title={LivePhoto: Real Image Animation with Text-guided Motion Control},
