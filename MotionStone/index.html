@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.2">
+  <meta charset="utf-8">
+  <meta name="description"
+        content="MotionStone">
+  <meta name="keywords" content="Image Animation, Video Generation">
+  <title>MotionStone</title>
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/MotionStone_logo.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <img src="./static/images/MotionStone_logo.png" alt="图标描述" style="width: 80px; height: 80px; vertical-align: middle; margin-right: 0px; position: relative; top: -8px;">
+            MotionStone: Decoupled Motion Intensity Modulation with Diffusion Transformer for Image-to-Video Generation
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://shuweis.github.io/">Shuwei Shi</a><sup>1</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=BwdpTiQAAAAJ&hl=zh-CN">Biao Gong</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://xavierchen34.github.io/">Xi Chen</a><sup>3</sup></a>&nbsp</a>&nbsp  
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~DanDan_Zheng1">Dandan Zheng</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://tanshuai0219.github.io/">Shuai Tan</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Zizheng_Yang1">Zizheng Yang</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=v4e49qEAAAAJ&hl=en">Yuyuan Li</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GUxrycUAAAAJ&hl=zh-CN">Jingwen He</a><sup>4</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=hMDQifQAAAAJ&hl=zh-CN&oi=ao">Kecheng Zheng</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Jingdong_Chen1">Jingdong Chen</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=uBHJx08AAAAJ&hl=en">Ming Yang</a><sup>2</sup></a>&nbsp</a>&nbsp    
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.co.jp/citations?user=JD-5DKcAAAAJ&hl=ja">Yinqiang Zheng</a><sup>1</sup>  
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>The University of Tokyo</a>&nbsp</a>&nbsp  </span>
+            <span class="author-block"><sup>2</sup>Ant Group</a>&nbsp</a>&nbsp  </span>
+            <span class="author-block"><sup>3</sup>The University of Hong Kong</a>&nbsp</a>&nbsp</span>
+            <span class="author-block"><sup>4</sup>The Chinese University of Hong Kong</span>
+            
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=   "https://openaccess.thecvf.com/content/CVPR2025/html/Shi_MotionStone_Decoupled_Motion_Intensity_Modulation_with_Diffusion_Transformer_for_Image-to-Video_CVPR_2025_paper.html"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- <span class="link-block">
+                <a href="https://github.com/XavierCHEN34/LivePhoto"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>Demo</span>
+                </a>
+              </span> -->
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=M2vzrTYAsQI"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/XavierCHEN34/LivePhoto"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+          <div class="gif-grid">
+            
+            <div class="item image-item">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Figure1/lion.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"The white lion opens its mouth and roars."</p>
+              <img src="generate_images/gif_samples/Figure1/lion.gif" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Figure1/flower.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"The flower is blooming."</p>
+              <img src="generate_images/gif_samples/Figure1/flower.gif" alt="image">
+            </div>
+            
+
+            
+            <div class="item image-item">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Figure1/thumbs-up.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"This man gives a thumbs-up."</p>
+              <img src="generate_images/gif_samples/Figure1/thumbs-up.gif" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Appendix_figure3/Bigfoot walks.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"Bigfoot is walking through the woods."</p>
+              <img src="generate_images/gif_samples/Appendix_figure3/Bigfoot walks.gif" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Appendix_figure3/Mouse falls.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"Mouse falls to the ground."</p>
+              <img src="generate_images/gif_samples/Appendix_figure3/Mouse falls.gif" alt="image">
+            </div>
+
+            <!-- 第3行 -->
+            <div class="item image-item">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Appendix_figure3/Planet rotates.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"Camera zooms in. A giant striped planet rotates."</p>
+              <img src="generate_images/gif_samples/Appendix_figure3/Planet rotates.gif" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Appendix_figure3/Pouring Water.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"Pouring water into the glass."</p>
+              <img src="generate_images/gif_samples/Appendix_figure3/Pouring Water.gif" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Reference Image</p>
+              <img src="generate_images/video_sample_frame/Appendix_figure3/woman.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">"A young woman adjusts her gaze and hand while holding a leafy branch."</p>
+              <img src="generate_images/gif_samples/Appendix_figure3/woman.gif" alt="image">
+            </div>
+
+           
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The image-to-video (I2V) generation is conditioned on the static image, which has been enhanced recently by the motion intensity as an additional control signal. These motion-aware models are appealing to generate diverse motion patterns, yet there lacks a reliable motion estimator for training such models on large-scale video set in the wild. 
+            Traditional metrics, e.g., SSIM or optical flow, are hard to generalize to arbitrary videos, while, it is very tough for human annotators to label the abstract motion intensity neither. Furthermore, the motion intensity shall reveal both local object motion and global camera movement, which has not been studied before.
+            This paper addresses the challenge with a new motion estimator, capable of measuring the decoupled motion intensities of objects and cameras in video. We leverage the contrastive learning on randomly paired videos and distinguish the video with greater motion intensity.
+            Such a paradigm is friendly for annotation and easy to scale up to achieve stable performance on motion estimation. We then present a new I2V model, named MotionStone, developed with the decoupled motion estimator.
+            Experimental results demonstrate the stability of the proposed motion estimator and the state-of-the-art performance of MotionStone on I2V generation.  These advantages warrant the decoupled motion estimator to serve as a general plug-in enhancer for both data processing and video generation training.
+
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" style="text-align: center;">Motion Control with Text Instructions and Decoupled Motion Intensities</h2>
+          <div class="content has-text-justified">
+            <p>
+              Our unique feature is the precise camera or object motion control through text instructions. Furthermore, users have the ability to customize these motions by setting different  "motion intensities".
+            </p>
+          </div>
+
+          <div class="gif-grid">
+            <!-- 第1行 -->
+            <div class="item image-item">
+              <p class="gif-caption-small">"Camera pans right. A turtle is swimming."</p>
+              <img src="generate_images/video_sample_frame/Figure5/camera_pan_motion2.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 2</p>
+              <img src="generate_images/gif_samples/Figure5/camera_pan_motion2.gif" alt="GIF 1" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 5</p>
+              <img src="generate_images/gif_samples/Figure5/camera_pan_motion5.gif" alt="GIF 2" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 8</p>
+              <img src="generate_images/gif_samples/Figure5/camera_pan_motion8.gif" alt="GIF 3" width="100%">
+            </div>
+            <!-- 第2行 -->
+            <div class="item image-item">
+              <p class="gif-caption-small">“Camera zooms in. A warm campfire burning brightly at night,
+                with flames flickering and sparks flying upward into the dark sky.”</p>
+              <img src="generate_images/video_sample_frame/Figure5/camera_zoom_motion2.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 2</p>
+              <img src="generate_images/gif_samples/Figure5/camera_zoom_motion2.gif" alt="GIF 1" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 5</p>
+              <img src="generate_images/gif_samples/Figure5/camera_zoom_motion5.gif" alt="GIF 2" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Camera Motion Intensity: 8</p>
+              <img src="generate_images/gif_samples/Figure5/camera_zoom_motion8.gif" alt="GIF 3" width="100%">
+            </div>
+
+            <div class="item image-item">
+              <p class="gif-caption-small">“A teddy bear is dancing in the snow.”</p>
+              <img src="generate_images/video_sample_frame/Figure6/teddy_bear_motion2.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 2</p>
+              <img src="generate_images/gif_samples/Figure6/teddy_bear_motion2.gif" alt="GIF 1" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 5</p>
+              <img src="generate_images/gif_samples/Figure6/teddy_bear_motion5.gif" alt="GIF 2" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 8</p>
+              <img src="generate_images/gif_samples/Figure6/teddy_bear_motion8.gif" alt="GIF 3" width="100%">
+            </div>
+
+
+            <div class="item image-item">
+              <p class="gif-caption-small">“Wind blows the tree.”</p>
+              <img src="generate_images/video_sample_frame/Figure6_tree/motion2.png" alt="image">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 2</p>
+              <img src="generate_images/gif_samples/Figure6_tree/motion2.gif" alt="GIF 1" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 5</p>
+              <img src="generate_images/gif_samples/Figure6_tree/motion5.gif" alt="GIF 2" width="100%">
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-small">Object Motion Intensity: 8</p>
+              <img src="generate_images/gif_samples/Figure6_tree/motion8.gif" alt="GIF 3" width="100%">
+            </div>
+
+            <!-- <div class="item image-item">
+              <p class="gif-caption-intens">Motion Intensity: 2</p>
+              <img src="./generate_images/Control/Lecun/The-man-smiles-intens2.gif" alt="image">
+              
+            </div> -->
+
+
+            <!-- <div class="item item-steve">
+              <p class="gif-caption-intens">Motion Intensity: 5</p>
+              <img src="./generate_images/Control/Lecun/The-man-smiles-intens5.gif" alt="GIF 1" width="100%">
+              
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-intens">Motion Intensity: 3</p>
+              <img src="./generate_images/Control/Lecun/2-The-man-gives-a-thumb-up..gif" alt="GIF 2" width="100%">
+              
+            </div>
+            <div class="item item-steve">
+              <p class="gif-caption-intens">Motion Intensity: 7</p>
+              <img src="./generate_images/Control/Lecun/The-man-gives-a-thumbs-up-intens72.gif" alt="GIF 3" width="100%">
+            </div> -->
+  </div>
+</section>
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" style="text-align: center;">Comparisons with Existing Alternatives</h2>
+          <div class="content has-text-justified">
+            <p>
+              We compare MotionStone with a recent Image to-Video (I2V) method CogVideoX.
+              Notably, MotionStone demonstrates superior performance in text-guided motion control.
+            </p>
+          </div>
+
+          <div class="gif-grid-3">
+            <!-- 第1行 -->
+            <div class="full-width-text">
+              <p>"A vast, luminous spiral galaxy with a warm yellow core and
+                colorful arms slowly rotates against a dark backdrop, with stars
+                scattered throughout, as the camera pushes in towards the bright
+                core."</p>
+            </div>
+            <div class="item image-item">
+              <img src="generate_images/video_sample_frame/Figure4/Example1/cogvideox_fRyD1ourEzU_000_1.png" alt="image">
+              <p class="gif-caption">Reference Image</p>
+            </div>
+            
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example1/cogvideox_fRyD1ourEzU_000_1.gif" alt="GIF 2" width="100%">
+              <p class="gif-caption">CogVideoX</p>
+            </div>
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example1/our_fRyD1ourEzU_000_1.gif" alt="GIF 3" width="100%">
+              <p class="gif-caption">MotionStone</p>
+            </div>
+
+
+            <div class="full-width-text">
+              <p>"A fair-skinned, blonde person sits slightly to the left, while
+                another individual with a darker complexion, holding a small
+                black makeup pencil, carefully applies makeup around their eyes.
+                The seated person remains still throughout the process."</p>
+            </div>
+            <div class="item image-item">
+              <img src="generate_images/video_sample_frame/Figure4/Example2/cogvideox_39Lv_Ntl0gY_004_3.png" alt="image">
+              <p class="gif-caption">Reference Image</p>
+            </div>
+            
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example2/cogvideox_39Lv_Ntl0gY_004_3.gif" alt="GIF 2" width="100%">
+              <p class="gif-caption">CogVideoX</p>
+            </div>
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example2/our_39Lv_Ntl0gY_004_3.gif" alt="GIF 3" width="100%">
+              <p class="gif-caption">MotionStone</p>
+            </div>
+            
+            <div class="full-width-text">
+              <p>"A person, wearing a red shirt and a helmet, rides a mountain Example 4
+                bike along a rocky path. The terrain is rugged, with large rock
+                formations and a dirt path."</p>
+            </div>
+            <div class="item image-item">
+              <img src="generate_images/video_sample_frame/Figure4/Example3/cogvideox_9lGiNqI144w_001_1.png" alt="image">
+              <p class="gif-caption">Reference Image</p>
+            </div>
+            
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example3/cogvideox_9lGiNqI144w_001_1.gif" alt="GIF 2" width="100%">
+              <p class="gif-caption">CogVideoX</p>
+            </div>
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example3/our_9lGiNqI144w_001_1.gif" alt="GIF 3" width="100%">
+              <p class="gif-caption">MotionStone</p>
+            </div>
+
+
+            <div class="full-width-text">
+              <p>"A giraffe with a light brown and white patterned coat stands in a
+                lush environment, moving its head from a frontal view to the
+                right and slightly lowering its head as it eats leaves from nearby
+                plants."</p>
+            </div>
+            <div class="item image-item">
+              <img src="generate_images/video_sample_frame/Figure4/Example4/cogvideox_lXoH1oQJvHo_361_0_0.png" alt="image">
+              <p class="gif-caption">Reference Image</p>
+            </div>
+            
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example4/cogvideox_lXoH1oQJvHo_361_0_0.gif" alt="GIF 2" width="100%">
+              <p class="gif-caption">CogVideoX</p>
+            </div>
+            <div class="item item-steve">
+              <img src="generate_images/gif_samples/Figure4/Example4/ours_lXoH1oQJvHo_361_0_0.gif" alt="GIF 3" width="100%">
+              <p class="gif-caption">MotionStone</p>
+            </div>
+
+            
+
+           
+          </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" style="text-align: center;">Pipeline</h2>
+        <div class="content has-text-justified">
+          <p>
+            The framework of our model is shown below. The
+            model takes a reference image, a text prompt, and two disentangled motion intensities predicted by a motion intensity
+            estimator as inputs. During training, we first extract the first
+            frame from the input video to use as a conditioning reference for generation. The trained motion intensity estimator
+            then predicts the camera and object motion intensities of
+            the input video, providing two motion scores that guide the
+            video generation process. During inference, users can specify the desired motion intensities for the object and camera,
+            if available, to customize the generated video. The model
+            takes a latent z and concatenates the
+            first frame latent of the video along the channel dimension
+            to guide video generation. For frames beyond the first in the
+            video sequence, zeros are padded in place. Subsequently,
+            the model uses a text encoder to extract the features of the
+            text prompt, which are then concatenated with the latent
+            and fed into the diffusion transformer. Meanwhile, the
+            two motion intensities predicted by the motion estimator
+            are mapped to high-dimensional embeddings by MLP, then
+            concatenated and added to the time step t. This combined
+            representation serves as a modulation condition for the
+            vision and text features, enabling fine-grained control over
+            the motion of video generation.
+          </p>
+        </div>
+
+        <div class="image-area">
+          <img src="./static/images/pipeline_motion.png" alt="pipeline" width="100%">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section"  style="margin-top: 0; padding-top: 30px;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="text-align: center;">Video Introduction</h2>
+        <video poster="" id="ade" autoplay controls muted loop playsinline height="10%">
+          <source src="./generate_images/PPT.mp4"
+                  type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{shi2025motionstone,
+      title={Motionstone: Decoupled motion intensity modulation with diffusion transformer for image-to-video generation},
+      author={Shi, Shuwei and Gong, Biao and Chen, Xi and Zheng, Dandan and Tan, Shuai and Yang, Zizheng and Li, Yuyuan and He, Jingwen and Zheng, Kecheng and Chen, Jingdong and others},
+      booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
+      pages={22864--22874},
+      year={2025}
+    }</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+      <div class="columns is-centered">
+          <div class="column is-8">
+              <div class="content">
+                  <p>
+                      This page was built using the <a
+                          href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                          target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                          href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                      You are free to borrow the of this website, we just ask that you link back to this page in
+                      the footer. <br> This website is licensed under a <a rel="license"
+                          href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                          Commons Attribution-ShareAlike 4.0 International License</a>.
+                  </p>
+                  <p class="has-text-centered">Total clicks: <span id="busuanzi_value_site_pv"></span></p>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>
+
+</body>
+</html>
