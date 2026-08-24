@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Surprise Forcing: What to Remember, When to Skip in Long Video Generation</title>
+  <meta name="description" content="Surprise Forcing is a training-free framework for autoregressive long video generation: a Surprise-Gated Memory Bank decides what to remember, and Surprise-Aware Denoising decides when to skip redundant denoising steps." />
+  <meta property="og:title" content="Surprise Forcing: What to Remember, When to Skip in Long Video Generation" />
+  <meta property="og:description" content="A training-free framework that improves long-horizon consistency and efficiency of autoregressive video diffusion via surprise-driven memory and adaptive denoising. ECCV 2026." />
+  <meta property="og:image" content="https://shuweis.github.io/Surprise_Forcing/static/images/teaser.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --scale: 0.9;
+      --bg:#0b0a10;
+      --panel:#15121b; --panel-2:#100e16;
+      --text:#f0ecf4; --muted:#b3adc4;
+      /* Surprise Forcing palette: amber → coral, cyan accent */
+      --brand-1:#ffb020; --brand-2:#ff5e7d; --accent:#4cc9f0;
+      --danger:#ff6b6b; --good:#32d296;
+      --radius:20px;
+      --ring: 0 0 0 2px rgba(255,94,125,.35), 0 0 40px rgba(255,176,32,.15);
+      --secGap: 56px;
+      --secTitleSize: clamp(22px, 28px * var(--scale), 36px);
+      --maxW: calc(1440px * var(--scale));
+      --figW: calc(1120px * var(--scale));
+      --videoFigW: calc(var(--figW) * 0.92);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(255,176,32,.16), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(255,94,125,.14), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      -webkit-text-size-adjust:100%;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width: var(--maxW); margin:0 auto; padding:28px}
+
+    /* Sticky Nav */
+    .topnav{
+      position: sticky; top:0; z-index:30;
+      background: linear-gradient(180deg,var(--bg),rgba(0,0,0,0));
+      backdrop-filter: saturate(150%) blur(8px);
+      -webkit-backdrop-filter: saturate(150%) blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .topnav .inner{
+      width:100%; max-width: var(--maxW); margin:0 auto; padding:12px 28px;
+      display:flex; align-items:center; gap:16px;
+    }
+    .topnav nav{display:flex;gap:14px;flex:1;flex-wrap:wrap;justify-content:center;min-width:0}
+    .chip{
+      padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      white-space:nowrap; font-size:.92rem;
+    }
+    .chip:hover{ box-shadow: var(--ring); }
+
+    /* Hero */
+    header.hero{position:relative;display:grid;grid-template-columns:1fr;gap:12px;align-items:center;margin-top:18px}
+    .title-wrap{position:relative;padding:6px 0 2px 0;overflow:hidden}
+    .title-text{
+      font-family:'Space Grotesk', Inter, sans-serif;
+      font-weight:800; line-height:1.15; letter-spacing:.01em;
+      font-size:clamp(36px, calc(64px * var(--scale)), 74px);
+      background:linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-align:center;
+    }
+    .title-sub{
+      margin-top:8px;
+      font-family:'Space Grotesk', Inter, sans-serif;
+      font-weight:700; line-height:1.25;
+      font-size:clamp(18px, calc(27px * var(--scale)), 36px);
+      color:var(--text); opacity:.95; text-align:center; padding:0 16px;
+    }
+    .conf-pill{
+      display:inline-flex; align-items:center; gap:8px;
+      margin:14px auto 0; padding:5px 14px; border-radius:999px;
+      font-family:'Space Grotesk', Inter, sans-serif; font-weight:800; font-size:.95rem;
+      background:linear-gradient(90deg, rgba(255,176,32,.22), rgba(255,94,125,.22));
+      border:1px solid rgba(255,255,255,.2); letter-spacing:.05em;
+    }
+    .hero-center{text-align:center}
+
+    /* Sparks */
+    .sparks{position:absolute;inset:0;pointer-events:none;opacity:.7}
+    .spark{position:absolute;width:2px;height:2px;background:radial-gradient(circle,var(--brand-1),transparent 70%);border-radius:50%;animation:fly 6s linear infinite}
+    @keyframes fly{from{transform:translate3d(0,0,0)}to{transform:translate3d(140vw,-40vh,0)}}
+
+    .authors{text-align:center; margin-top:14px; line-height:1.8; font-size:1.02rem}
+    .authors sup{font-size:.7em; vertical-align:super; opacity:.85}
+    .affils{margin-top:8px;text-align:center; opacity:.9}
+    .affils sup{font-size:.75em; vertical-align:super; opacity:.85}
+    .corr-note{margin-top:4px;text-align:center;color:var(--muted);font-size:.85rem}
+
+    .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+    .cta{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.18);font-weight:700}
+    .cta:hover{box-shadow:var(--ring)}
+    .cta.pending{opacity:.55; cursor:default}
+    .cta.pending:hover{box-shadow:none}
+    .cta .soon{font-size:.7rem; font-weight:800; letter-spacing:.06em; padding:2px 6px; border-radius:6px; background:rgba(255,255,255,.12); color:var(--muted)}
+
+    .tldr{margin-top:16px; text-align:center; max-width:76ch; margin-left:auto; margin-right:auto; line-height:1.6; font-size:1rem; color:var(--text)}
+    .tldr .lead{opacity:.85}
+
+    .hl{
+      display:inline-block; padding:2px 8px; border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,176,32,.25), rgba(255,94,125,.25));
+      border:1px solid rgba(255,255,255,.18); font-weight:900; letter-spacing:.01em;
+      box-shadow:0 0 18px rgba(255,94,125,.18), inset 0 0 1px rgba(255,255,255,.25);
+    }
+
+    /* Sections */
+    section{ margin: var(--secGap) 0; }
+    .section-title{
+      display:flex; align-items:center; gap:10px; justify-content:center; text-align:center;
+      font-family:"Space Grotesk"; font-weight:800; font-size: var(--secTitleSize); letter-spacing:.02em;
+    }
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg, var(--brand-1), var(--brand-2)); box-shadow:0 0 18px rgba(255,94,125,.35)}
+    .note{color:var(--muted);font-size:.95rem;margin-top:6px;text-align:center}
+
+    .teaser{
+      display:grid; gap:14px; align-items:center; justify-items:center;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+      border-radius:16px; padding:14px; text-align:center;
+      width:100%; max-width: var(--figW); margin:16px auto 0;
+    }
+    img{display:block;margin:0 auto;max-width:100%;height:auto}
+
+    .fig{
+      width:100%; max-width: var(--figW);
+      border:1px solid rgba(255,255,255,.1); border-radius:12px; overflow:hidden;
+      background:#0f0d15; display:block; padding:12px; margin:16px auto 0; text-align:center;
+    }
+    .fig-caption{color:var(--muted); font-size:.92rem; text-align:center; margin-top:10px; max-width:900px; margin-left:auto; margin-right:auto}
+
+    /* Video blocks */
+    .video-block{
+      width:100%; max-width: var(--videoFigW); margin:22px auto 0;
+    }
+    .video-frame{
+      position:relative; background:#000; border-radius:14px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .video-frame video{width:100%; display:block; aspect-ratio:832/480; object-fit:contain; background:#000}
+    .prompt-caption{
+      margin-top:10px; color:var(--muted); font-size:.93rem; line-height:1.55; text-align:center;
+    }
+    .prompt-caption .plabel{
+      display:inline-block; margin-right:6px; padding:1px 8px; border-radius:6px;
+      font-size:.72rem; font-weight:800; letter-spacing:.06em; color:#0b0a10;
+      background:linear-gradient(90deg, var(--brand-1), #ffd66b); vertical-align:middle;
+    }
+
+    /* Comparison grid */
+    .cmp-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+      max-width: var(--videoFigW); margin:18px auto 0;
+    }
+    .cmp-cell{
+      position:relative; background:#000; border-radius:12px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.08); 
+    }
+    .cmp-cell video{width:100%; height:100%; display:block; aspect-ratio:832/480; object-fit:contain}
+    .cmp-label{
+      position:absolute; top:10px; left:10px; z-index:3;
+      padding:5px 10px; border-radius:999px; font-weight:800; font-size:.78rem; letter-spacing:.02em;
+      background:rgba(20,16,26,.72); border:1px solid rgba(255,255,255,.14);
+      -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    }
+    .cmp-label.ours{
+      color:#c6f8e7; border-color:rgba(50,210,150,.45);
+      background:linear-gradient(180deg, rgba(50,210,150,.22), rgba(20,16,26,.72));
+      box-shadow:0 0 18px rgba(50,210,150,.18);
+    }
+    .cmp-label.baseline{ color:#ffd1d1; border-color:rgba(255,107,107,.35); }
+    .cmp-info{
+      display:flex; flex-direction:column; justify-content:center; gap:10px;
+      padding:18px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.1);
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    }
+    .cmp-info h4{
+      margin:0; font-family:'Space Grotesk'; font-weight:800; font-size:1.05rem;
+      background:linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .cmp-info p{margin:0; color:var(--muted); font-size:.9rem; line-height:1.6}
+    @media (max-width:768px){
+      .cmp-grid{grid-template-columns:1fr; gap:10px}
+      .cmp-label{font-size:.72rem; padding:4px 8px}
+    }
+
+    /* Tables */
+    .paper-table-block{ max-width: var(--figW); margin:20px auto 0; }
+    .paper-table-caption{ color:var(--muted); font-size:.92rem; line-height:1.55; margin:0 0 10px; text-align:left; }
+    .paper-table-wrap{
+      overflow-x:auto; border:1px solid rgba(255,255,255,.1); border-radius:12px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
+    }
+    .paper-table{ width:100%; min-width:760px; border-collapse:collapse; color:var(--text); font-size:.85rem; }
+    .paper-table th, .paper-table td{
+      padding:9px 10px; border-bottom:1px solid rgba(255,255,255,.08);
+      text-align:center; white-space:nowrap;
+    }
+    .paper-table thead tr:not(.group) th{ white-space:normal; min-width:72px;
+    }
+    .paper-table th:first-child, .paper-table td:first-child{ text-align:left; }
+    .paper-table thead th{ font-weight:800; color:#fff5f7; background:rgba(255,255,255,.045); }
+    .paper-table thead .group th{ border-bottom:1px solid rgba(255,255,255,.14); }
+    .paper-table tbody tr:last-child td{ border-bottom:none; }
+    .paper-table .best{ color:var(--brand-1); font-weight:800; }
+    .paper-table tr.ours td{ background:rgba(255,176,32,.07); font-weight:600; }
+    .paper-table .colsep{ border-left:1px solid rgba(255,255,255,.12); }
+
+    pre.bib{
+      background:#0f0d15;color:#f3e5d8;padding:16px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.08); overflow:auto; font-size:.86rem; line-height:1.5;
+      max-width: var(--figW); margin:16px auto 0;
+    }
+
+    footer{margin:64px 0 28px; color:var(--muted); font-size:.9rem; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 16px;}
+    .footer-note{margin-top:6px; font-size:.88rem; opacity:.9;}
+    .footer-note a{ text-decoration:underline; text-underline-offset:3px; }
+
+    @media (max-width:1024px){
+      :root{ --scale:0.92; --secGap:44px; --maxW:100vw; --figW:min(100vw - 24px, 1120px); }
+      .container{ padding:20px; }
+      .topnav .inner{ padding:14px 20px; }
+      .title-text{ font-size:clamp(30px, 6.6vw, 52px); }
+      .title-sub{ font-size:clamp(17px, 3.4vw, 26px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sticky top nav -->
+  <div class="topnav">
+    <div class="inner">
+      <nav>
+        <a class="chip" href="#abstract">Abstract</a>
+        <a class="chip" href="#method">Method</a>
+        <a class="chip" href="#videos">Long Videos</a>
+        <a class="chip" href="#comparison">Comparison</a>
+        <a class="chip" href="#results">Results</a>
+        <a class="chip" href="#bibtex">BibTeX</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container" id="top">
+    <header class="hero">
+      <div class="title-wrap">
+        <div class="sparks" aria-hidden="true"></div>
+        <div class="title-text">Surprise Forcing</div>
+        <div class="title-sub">What to Remember, When to Skip in Long Video Generation</div>
+        <div class="hero-center"><span class="conf-pill">ECCV 2026</span></div>
+      </div>
+
+      <div class="paper-meta">
+        <div class="authors">
+          Shuwei Shi<sup>1</sup> ·
+          Zhen Li<sup>2</sup> ·
+          Muyao Niu<sup>1</sup> ·
+          Chuanhao Li<sup>2</sup> ·
+          Bo Zheng<sup>2</sup> ·
+          Kaipeng Zhang<sup>2,†</sup> ·
+          Yinqiang Zheng<sup>1,†</sup>
+        </div>
+        <div class="affils">
+          <sup>1</sup>The University of Tokyo &nbsp;&nbsp; <sup>2</sup>Alaya Lab
+        </div>
+        <div class="corr-note">† Corresponding authors</div>
+
+        <div class="cta-row" role="group" aria-label="resources">
+          <span class="cta pending" title="Paper link coming soon">📄 Paper <span class="soon">SOON</span></span>
+          <span class="cta pending" title="Code coming soon">🐙 Code <span class="soon">SOON</span></span>
+        </div>
+
+        <div class="tldr">
+          <span class="lead">TL;DR —</span>
+          <strong>Surprise Forcing</strong> is a <span class="hl">training-free</span> framework for autoregressive long
+          video generation that makes content-adaptive decisions about
+          <strong>what to remember</strong> — a Surprise-Gated Memory Bank keeps only the most informative frames evicted
+          from the rolling KV cache — and <strong>when to skip</strong> — Surprise-Aware Denoising cuts redundant denoising
+          steps on easy chunks — improving long-horizon consistency at comparable real-time inference speed.
+        </div>
+      </div>
+    </header>
+
+    <!-- Abstract -->
+    <section id="abstract" aria-labelledby="abstract-title">
+      <div class="section-title" id="abstract-title"><span class="dot"></span> Abstract</div>
+      <div class="teaser">
+        <img src="./static/images/teaser.jpg" alt="One-minute videos generated by Surprise Forcing in a real-time stream" loading="lazy" decoding="async">
+        <p class="note" style="max-width:1000px;margin:0 auto;text-align:left;">
+          Autoregressive diffusion models have shown remarkable progress in long video generation by producing frames
+          causally. To bound memory and computational cost, these models rely on a fixed-size sliding-window KV cache.
+          While attention sinks retain a few initial frames as temporal anchors, the vast majority of historical context
+          is irrecoverably discarded as the window advances, severing long-range dependencies essential for scene
+          consistency and narrative coherence. Meanwhile, the fixed multi-step denoising schedule applies uniform effort
+          to every chunk, ignoring the varying demands imposed by diverse scene dynamics across temporal segments.
+          In this paper, we propose <strong>Surprise Forcing</strong>, a <strong>training-free</strong> framework that
+          addresses both bottlenecks. We introduce a <strong><span class="hl">Surprise-Gated Memory Bank</span></strong>
+          that scores each evicted frame by its aggregate divergence from the bank and nearest-neighbor novelty,
+          admitting only the most informative frames via a budget-normalized gate that adapts to video dynamics.
+          A priority-based eviction policy keeps the bank compact yet informative, while dynamic routing retrieves the
+          most relevant historical frames at attention time. We further propose
+          <strong><span class="hl">Surprise-Aware Denoising</span></strong>, which uses intra-chunk cosine distance among
+          adjacent frames after a single denoising step as a self-referential difficulty predictor, enabling adaptive
+          step reduction for easy chunks while preserving full refinement for complex ones. Experiments on VBench show
+          that Surprise Forcing maintains robust narrative coherence in long videos without compromising real-time
+          responsiveness.
+        </p>
+      </div>
+    </section>
+
+    <!-- Method -->
+    <section id="method" aria-labelledby="method-title">
+      <div class="section-title" id="method-title"><span class="dot"></span> Method</div>
+      <p class="note" style="max-width:1000px;margin:6px auto 4px;">
+        Our key insight is that a model can use its <em>own internal signals</em> to estimate informativeness and
+        difficulty: only frames that are <em>surprising</em> should be committed to long-term memory, and only chunks
+        predicted to be <em>hard</em> should receive full denoising compute. Both mechanisms operate purely at
+        inference time — no retraining or fine-tuning is required.
+      </p>
+      <div class="fig" aria-label="Surprise Forcing framework">
+        <img src="./static/images/framework.png" alt="The framework of Surprise Forcing: Surprise-Gated Memory Bank and Surprise-Aware Denoising" loading="lazy" decoding="async">
+      </div>
+      <div class="fig-caption">
+        <strong>The framework of Surprise Forcing.</strong> Two surprise-driven components: (a) the
+        <strong>Surprise-Gated Memory Bank</strong> regulates the writing and eviction of memory entries based on
+        surprise-related signals; (b) <strong>Surprise-Aware Denoising</strong> employs an Intra-Chunk Surprise
+        Predictor to estimate whether the denoising process for the current chunk can be accelerated.
+      </div>
+      <div class="fig" aria-label="Eviction strategy comparison">
+        <img src="./static/images/eviction.png" alt="Comparison of historical context eviction strategies" loading="lazy" decoding="async">
+      </div>
+      <div class="fig-caption">
+        <strong>Comparison of historical context eviction strategies.</strong> Unlike previous methods that rely solely
+        on temporal order (FIFO) or current relevance as the eviction criterion, our priority-based eviction combines
+        the surprise score, usage frequency, and age into a principled mechanism for memory eviction.
+      </div>
+    </section>
+
+    <!-- Long videos -->
+    <section id="videos" aria-labelledby="videos-title">
+      <div class="section-title" id="videos-title"><span class="dot"></span> One-Minute Video Generation</div>
+      <p class="note" style="max-width:1000px;margin:6px auto 0;">
+        60-second videos generated by <strong>Surprise Forcing</strong> at 832×480 in a real-time stream, on prompts from
+        the Movie Gen Video Bench. Videos start automatically when scrolled into view; use the controls to scrub.
+      </p>
+
+      <div class="video-block">
+        <div class="video-frame">
+          <video muted loop playsinline controls preload="metadata" data-autoplay
+                 poster="./static/posters/ours_0040_otter.jpg" src="./static/videos/ours_0040_otter.mp4"></video>
+        </div>
+        <p class="prompt-caption"><span class="plabel">PROMPT</span>An adorable happy otter confidently stands on a surfboard wearing a yellow lifejacket, riding along turquoise tropical waters near lush tropical islands, 3D digital render art style.</p>
+      </div>
+
+      <div class="video-block">
+        <div class="video-frame">
+          <video muted loop playsinline controls preload="metadata" data-autoplay
+                 poster="./static/posters/ours_0172_forest_girl.jpg" src="./static/videos/ours_0172_forest_girl.mp4"></video>
+        </div>
+        <p class="prompt-caption"><span class="plabel">PROMPT</span>A real girl franatically running a dense forest with bushes, trees, in rainy day, the animals are running after her and she is screaming and shouting.</p>
+      </div>
+
+      <div class="video-block">
+        <div class="video-frame">
+          <video muted loop playsinline controls preload="metadata" data-autoplay
+                 poster="./static/posters/ours_0382_alley_cat.jpg" src="./static/videos/ours_0382_alley_cat.mp4"></video>
+        </div>
+        <p class="prompt-caption"><span class="plabel">PROMPT</span>A white and orange tabby alley cat is seen darting across a back street alley in a heavy rain, looking for shelter.</p>
+      </div>
+    </section>
+
+    <!-- Comparison -->
+    <section id="comparison" aria-labelledby="comparison-title">
+      <div class="section-title" id="comparison-title"><span class="dot"></span> Qualitative Comparison</div>
+      <p class="note" style="max-width:1000px;margin:6px auto 0;">
+        Five-way comparison on a challenging 1-minute example with continuous, non-trivial motion —
+        <strong>Surprise Forcing (Ours)</strong> vs. <strong>CausVid</strong>, <strong>Self Forcing</strong>,
+        <strong>Rolling Forcing</strong>, and <strong>LongLive</strong>.
+        All tiles play in lock-step; use the controls on the <strong>Ours</strong> tile to play, pause, or scrub.
+      </p>
+
+      <div class="cmp-grid" id="cmp-0983">
+        <div class="cmp-cell">
+          <span class="cmp-label ours">Surprise Forcing (Ours)</span>
+          <video data-role="master" muted playsinline controls preload="auto" data-autoplay
+                 poster="./static/posters/cmp_0983_ours.jpg" src="./static/videos/cmp_0983_ours.mp4"></video>
+        </div>
+        <div class="cmp-cell">
+          <span class="cmp-label baseline">CausVid</span>
+          <video data-role="slave" muted playsinline preload="auto"
+                 poster="./static/posters/cmp_0983_causvid.jpg" src="./static/videos/cmp_0983_causvid.mp4"></video>
+        </div>
+        <div class="cmp-cell">
+          <span class="cmp-label baseline">Self Forcing</span>
+          <video data-role="slave" muted playsinline preload="auto"
+                 poster="./static/posters/cmp_0983_selfforcing.jpg" src="./static/videos/cmp_0983_selfforcing.mp4"></video>
+        </div>
+        <div class="cmp-cell">
+          <span class="cmp-label baseline">Rolling Forcing</span>
+          <video data-role="slave" muted playsinline preload="auto"
+                 poster="./static/posters/cmp_0983_rollingforcing.jpg" src="./static/videos/cmp_0983_rollingforcing.mp4"></video>
+        </div>
+        <div class="cmp-cell">
+          <span class="cmp-label baseline">LongLive</span>
+          <video data-role="slave" muted playsinline preload="auto"
+                 poster="./static/posters/cmp_0983_longlive.jpg" src="./static/videos/cmp_0983_longlive.mp4"></video>
+        </div>
+        <div class="cmp-info">
+          <h4>Prompt</h4>
+          <p>“An old man wearing blue jeans and a white t-shirt taking a pleasant stroll in Antarctica during a colorful
+          festival.” (Movie Gen Video Bench)</p>
+          <h4>What to look for</h4>
+          <p>CausVid suffers from severe error accumulation, with noticeable color drift and quality degradation over
+          time. Self Forcing deteriorates markedly once generation exceeds its training horizon. Rolling Forcing lets
+          the subject drift and exit the frame, while LongLive shows frequent changes in subject details.
+          <strong>Surprise Forcing</strong> maintains stability and subject consistency throughout, thanks to its
+          surprise-driven memory management.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results" aria-labelledby="results-title">
+      <div class="section-title" id="results-title"><span class="dot"></span> Quantitative Results</div>
+
+      <div class="paper-table-block">
+        <p class="paper-table-caption">
+          Quantitative comparisons on <strong>VBench (5&thinsp;s)</strong> short videos and
+          <strong>VBench-Long (60&thinsp;s)</strong> long videos. Under comparable inference speed, our method achieves
+          state-of-the-art performance across all metrics, and the speedup becomes more pronounced when generating
+          longer videos.
+        </p>
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr class="group">
+                <th></th>
+                <th colspan="4">VBench (5&thinsp;s)</th>
+                <th colspan="4" class="colsep">VBench-Long (60&thinsp;s)</th>
+              </tr>
+              <tr>
+                <th>Model</th>
+                <th>Total ↑</th><th>Sub. Consistency ↑</th><th>Mul. Objects ↑</th><th>FPS ↑</th>
+                <th class="colsep">Quality ↑</th><th>Sub. Consistency ↑</th><th>Aesthetic ↑</th><th>FPS ↑</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>CausVid</td><td>80.47</td><td>94.66</td><td>79.99</td><td>15.84</td><td class="colsep">75.97</td><td>96.41</td><td>48.42</td><td>15.84</td></tr>
+              <tr><td>Self Forcing</td><td>82.12</td><td>96.23</td><td>80.22</td><td>15.84</td><td class="colsep">80.53</td><td>97.19</td><td>55.98</td><td>15.84</td></tr>
+              <tr><td>Rolling Forcing</td><td>80.49</td><td>96.21</td><td>84.53</td><td>15.52</td><td class="colsep">80.23</td><td>98.3</td><td>60.97</td><td>15.52</td></tr>
+              <tr><td>LongLive</td><td>80.63</td><td>96.19</td><td>84.89</td><td class="best">18.01</td><td class="colsep">80.32</td><td>98.42</td><td>61.71</td><td class="best">18.01</td></tr>
+              <tr class="ours"><td>Surprise Forcing (Ours)</td><td class="best">83.40</td><td class="best">96.28</td><td class="best">87.50</td><td>16.45</td><td class="colsep best">81.88</td><td class="best">98.51</td><td class="best">63.98</td><td>17.18</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BibTeX -->
+    <section id="bibtex" aria-labelledby="bibtex-title">
+      <div class="section-title" id="bibtex-title"><span class="dot"></span> BibTeX</div>
+      <pre class="bib" aria-label="BibTeX entry"><code>@inproceedings{shi2026surpriseforcing,
+  title     = {Surprise Forcing: What to Remember, When to Skip in Long Video Generation},
+  author    = {Shi, Shuwei and Li, Zhen and Niu, Muyao and Li, Chuanhao and Zheng, Bo and Zhang, Kaipeng and Zheng, Yinqiang},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2026}
+}</code></pre>
+    </section>
+
+    <footer>
+      <div>
+        © 2026 Surprise Forcing Authors — The University of Tokyo &amp; Alaya Lab
+        <div class="footer-note">
+          Page template adapted from the
+          <a href="https://zhuang2002.github.io/SelfGradientForcing/" target="_blank" rel="noopener">Self Gradient Forcing project page</a> —
+          thanks to the SGF authors for open-sourcing it.
+        </div>
+        <div class="footer-note" style="margin-top:6px;">
+          Recommended browsers: Safari / Chrome / Microsoft Edge for the best playback experience.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /* ===== URL scale param ===== */
+    (function applyScaleFromQuery(){
+      const sp = new URLSearchParams(location.search).get('scale');
+      if(!sp) return;
+      const val = Math.max(0.6, Math.min(2.5, parseFloat(sp)));
+      if(!isNaN(val)) document.documentElement.style.setProperty('--scale', String(val));
+    })();
+
+    /* ===== title sparks ===== */
+    (function mountSparks(){
+      const wrap = document.querySelector('.title-wrap .sparks');
+      if(!wrap) return;
+      for(let i=0;i<22;i++){
+        const s=document.createElement('div');
+        s.className='spark';
+        s.style.left=(Math.random()*80+5)+'%';
+        s.style.top=(Math.random()*80+5)+'%';
+        s.style.animationDelay=(Math.random()*6)+'s';
+        s.style.opacity=(Math.random()*0.5+0.35).toFixed(2);
+        wrap.appendChild(s);
+      }
+    })();
+
+    /* ===== lock-step comparison playback ===== */
+    (function setupSync(){
+      const root = document.getElementById('cmp-0983');
+      if(!root) return;
+      const master = root.querySelector('video[data-role="master"]');
+      const slaves = Array.from(root.querySelectorAll('video[data-role="slave"]'));
+
+      const alignSlaves = () => slaves.forEach(v => {
+        try { v.currentTime = master.currentTime; } catch(e){}
+      });
+      master.addEventListener('play',  () => { alignSlaves(); slaves.forEach(v => v.play().catch(()=>{})); });
+      master.addEventListener('pause', () => slaves.forEach(v => v.pause()));
+      master.addEventListener('seeked', alignSlaves);
+      master.addEventListener('ended', () => {
+        master.currentTime = 0;
+        slaves.forEach(v => { try { v.currentTime = 0; } catch(e){} });
+        master.play().catch(()=>{});
+      });
+      /* drift correction */
+      setInterval(() => {
+        if (master.paused || master.seeking) return;
+        slaves.forEach(v => {
+          if (v.readyState >= 2 && Math.abs(v.currentTime - master.currentTime) > 0.25){
+            try { v.currentTime = master.currentTime; } catch(e){}
+          }
+          if (v.paused) v.play().catch(()=>{});
+        });
+      }, 800);
+    })();
+
+    /* ===== autoplay when visible, pause when hidden ===== */
+    (function lazyAutoplay(){
+      if (!('IntersectionObserver' in window)) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          const v = e.target;
+          if (e.isIntersecting){ v.play().catch(()=>{}); }
+          else { v.pause(); }
+        });
+      }, { threshold: 0.25 });
+      document.querySelectorAll('video[data-autoplay]').forEach(v => io.observe(v));
+    })();
+  </script>
+</body>
+</html>
